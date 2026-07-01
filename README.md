@@ -1,17 +1,11 @@
-# AND: Tiny Kingdoms v0.3.1
+# AND: Tiny Kingdoms v0.4.0
 
-Versione con nuova grafica personaggi e schermata selezione aggiornata.
+Versione platform 2D con selezione personaggio, primo livello, cristalli, slime, checkpoint e bandiera finale.
 
-## Come giocare
-- A/D o frecce: movimento
+## Comandi
+- A/D o Frecce: movimento
 - Spazio: salto
-- R: ricomincia
-- ESC: menu
+- R: ricomincia il livello
 
-## Personaggi
-- Leo
-- Kael
-- Zipp
-- Luna
-
-Carica tutti i file estratti nel repository GitHub `tiny-kingdoms`.
+## Pubblicazione
+Caricare tutti i file estratti nel repository GitHub `tiny-kingdoms` e fare commit.
