@@ -1,24 +1,17 @@
-# AND: Tiny Kingdoms
+# AND: Tiny Kingdoms v0.3.1
 
-Versione: **v0.3.0 - Character Select Platform**
+Versione con nuova grafica personaggi e schermata selezione aggiornata.
 
-## Come provarlo
-Apri `index.html` nel browser.
+## Come giocare
+- A/D o frecce: movimento
+- Spazio: salto
+- R: ricomincia
+- ESC: menu
 
-## Comandi
-- **A / D** oppure **Frecce**: muovi il personaggio
-- **Spazio**: salta
-- **R**: ricomincia il livello
-- **ESC**: torna al menu
+## Personaggi
+- Leo
+- Kael
+- Zipp
+- Luna
 
-## Novità v0.3.0
-- Cambio ufficiale verso stile platform 2D.
-- Nuovo titolo: **AND: Tiny Kingdoms**.
-- Menu principale rinnovato.
-- Selezione di 4 personaggi: Leo, Finn, Nox, Luna.
-- Primo livello platform con isole, piattaforme, cristalli e nemici semplici.
-- HUD con vita, energia, cristalli e personaggio scelto.
-- Fine livello base.
-
-## Pubblicazione
-Caricare i file estratti nel repository GitHub `tiny-kingdoms`. Vercel aggiornerà automaticamente il gioco.
+Carica tutti i file estratti nel repository GitHub `tiny-kingdoms`.

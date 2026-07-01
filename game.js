@@ -9,14 +9,17 @@
   const keys = new Set();
   let state = 'menu';
   let selectedHero = 'Leo';
+  const heroImages = {};
+  const heroImagePaths = { Leo:'assets/characters/leo.png', Kael:'assets/characters/kael.png', Zipp:'assets/characters/zipp.png', Luna:'assets/characters/luna.png' };
+  Object.entries(heroImagePaths).forEach(([id, src]) => { const img = new Image(); img.src = src; heroImages[id] = img; });
   let cameraX = 0;
   let crystals = 0;
   let gameWon = false;
 
   const heroes = [
     { id:'Leo', type:'blue', title:'Leo', desc:'Coraggioso e pronto all’avventura.', speed:5.2, jump:15.5, color:'#2d72c9', cape:'#174ea6' },
-    { id:'Finn', type:'red', title:'Finn', desc:'Agile, curioso e instancabile.', speed:5.8, jump:16.2, color:'#2f9a4a', cape:'#bb1e2d' },
-    { id:'Nox', type:'mystic', title:'Nox', desc:'Uno strano esserino del cielo.', speed:5.0, jump:15.2, color:'#12586a', cape:'#3b166d' },
+    { id:'Kael', type:'red', title:'Kael', desc:'Rapido, coraggioso e testardo.', speed:5.8, jump:16.2, color:'#2f9a4a', cape:'#bb1e2d' },
+    { id:'Zipp', type:'mystic', title:'Zipp', desc:'Strano, magico e imprevedibile.', speed:5.0, jump:15.2, color:'#12586a', cape:'#3b166d' },
     { id:'Luna', type:'princess', title:'Luna', desc:'Principessa gentile e determinata.', speed:5.4, jump:17.0, color:'#f071b7', cape:'#b83385' }
   ];
 
@@ -95,8 +98,9 @@
         <div class="cards">
           ${heroes.map(h => `
             <div class="card ${selectedHero===h.id?'selected':''}" data-hero="${h.id}">
-              <div class="portrait"><div class="avatar ${h.type}"><div class="cape"></div><div class="hair"></div><div class="head"></div><div class="body"></div><div class="legs"></div></div></div>
+              <div class="portrait big"><img src="${heroImagePaths[h.id]}" alt="${h.title}"></div>
               <h3>${h.title}</h3><p>${h.desc}</p>
+              <div class="stats"><span>Velocità ${'★'.repeat(Math.round(h.speed-2))}</span><span>Salto ${'★'.repeat(Math.round(h.jump-12))}</span></div>
             </div>`).join('')}
         </div>
         <button class="btn" id="startBtn">Inizia avventura</button>
@@ -230,20 +234,19 @@
   }
 
   function drawPlayer(){
-    const hero = heroById(selectedHero);
     const x = Math.round(player.x-cameraX), y=Math.round(player.y);
-    ctx.save();ctx.translate(x+player.w/2,y);ctx.scale(player.facing,1);ctx.translate(-player.w/2,0);
+    const img = heroImages[selectedHero];
     const bob = player.onGround ? Math.sin(player.anim)*3 : 0;
-    ctx.fillStyle=hero.cape;ctx.fillRect(-8,18+bob,16,38);
-    ctx.fillStyle='#ffd0a0';ctx.fillRect(5,0+bob,24,24);
-    ctx.fillStyle = hero.type==='princess' ? '#ffd44d' : hero.type==='mystic' ? '#101827' : '#6b3419';
-    ctx.fillRect(2,-5+bob,30,13);
-    ctx.fillStyle='#10243f';ctx.fillRect(11,9+bob,4,4);ctx.fillRect(23,9+bob,4,4);
-    ctx.fillStyle=hero.color;ctx.fillRect(2,26+bob,30,27);
-    ctx.fillStyle='#3b2414';ctx.fillRect(3,53+bob,10,19);ctx.fillRect(21,53-bob,10,19);
-    ctx.fillStyle='#5b341c';ctx.fillRect(-3,72+bob,17,8);ctx.fillRect(20,72-bob,17,8);
-    if(hero.type==='princess'){ctx.fillStyle='#ffeb70';ctx.fillRect(10,-15+bob,5,10);ctx.fillRect(18,-20+bob,5,15);ctx.fillRect(26,-15+bob,5,10)}
-    if(hero.type==='mystic'){ctx.fillStyle='#8ef6ff';ctx.fillRect(12,8+bob,5,5);ctx.fillRect(23,8+bob,5,5)}
+    ctx.save();
+    ctx.translate(x+player.w/2, y-24+bob);
+    ctx.scale(player.facing, 1);
+    ctx.imageSmoothingEnabled = false;
+    if(img && img.complete){
+      ctx.drawImage(img, -38, -28, 76, 102);
+    } else {
+      ctx.fillStyle='#2d72c9'; ctx.fillRect(-17,0,34,58);
+      ctx.fillStyle='#ffd0a0'; ctx.fillRect(-12,-18,24,22);
+    }
     ctx.restore();
   }
 
