@@ -4,31 +4,45 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tiny Kingdoms: Sky Islands</title>
+  <meta name="description" content="Tiny Kingdoms: Sky Islands - prototipo sandbox 2D." />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="game-wrap">
+  <div id="gameShell">
     <canvas id="game" width="960" height="540"></canvas>
-    <div id="hud">
-      <div class="brand">Tiny Kingdoms <span>Sky Islands</span></div>
-      <div class="stats">
-        <span>Legno: <b id="wood-count">0</b></span>
-        <span>Pietra: <b id="stone-count">0</b></span>
-        <span>Blocco: <b id="selected-block">Legno</b></span>
-      </div>
-      <div class="help">A/D o Frecce: muovi · Spazio: salta · Click sinistro: raccogli · Click destro: costruisci · 1 Legno · 2 Pietra · R: reset</div>
-    </div>
-    <div id="menu" class="screen active">
+
+    <section id="startScreen" class="panel overlay">
+      <div class="logoBadge">☁️</div>
       <h1>Tiny Kingdoms</h1>
       <h2>Sky Islands</h2>
-      <p>Costruisci il tuo piccolo regno tra le isole del cielo.</p>
-      <button id="play-btn">Gioca</button>
-    </div>
-    <div id="pause" class="screen">
-      <h1>Pausa</h1>
-      <p>Premi ESC per tornare al gioco.</p>
+      <p>Esplora, raccogli materiali e costruisci il tuo piccolo regno tra le nuvole.</p>
+      <button id="startBtn">Inizia avventura</button>
+      <button id="howBtn" class="ghost">Comandi</button>
+    </section>
+
+    <section id="helpScreen" class="panel overlay hidden">
+      <h2>Comandi</h2>
+      <p><strong>A / D</strong> oppure <strong>← / →</strong>: muovi il personaggio</p>
+      <p><strong>Spazio / W / ↑</strong>: salta</p>
+      <p><strong>Click sinistro</strong>: raccogli/rompi blocco</p>
+      <p><strong>Click destro</strong>: piazza blocco selezionato</p>
+      <p><strong>1 / 2 / 3</strong>: seleziona terra, legno, pietra</p>
+      <p><strong>P</strong>: pausa · <strong>R</strong>: reset mondo · <strong>S</strong>: salva</p>
+      <button id="backBtn">Torna al menu</button>
+    </section>
+
+    <div id="hud" class="hud hidden">
+      <div class="brandMini">Tiny Kingdoms <span>v0.2.0</span></div>
+      <div class="bars">
+        <div class="bar"><span>❤️ Vita</span><i id="lifeBar"></i></div>
+        <div class="bar energy"><span>⚡ Energia</span><i id="energyBar"></i></div>
+      </div>
+      <div id="inventory" class="inventory"></div>
+      <div id="objective" class="objective">Missione: raccogli 10 legni e 10 pietre</div>
+      <div id="message" class="message"></div>
     </div>
   </div>
-  <script type="module" src="src/main.js"></script>
+
+  <script src="game.js"></script>
 </body>
 </html>

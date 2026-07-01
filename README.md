@@ -1,17 +1,27 @@
 # Tiny Kingdoms: Sky Islands
 
-Versione: Sprint 1 / Pre-Alpha
+Versione: **v0.2.0 - Sprint 2**
+
+Tiny Kingdoms è un prototipo di videogioco sandbox 2D per browser.
+
+## Come provarlo
+
+Apri il file `index.html` nel browser.
 
 ## Comandi
-- A/D o Frecce: muovi il personaggio
-- Spazio: salta
-- Click sinistro: raccogli blocchi
-- Click destro: piazza blocchi
-- 1: seleziona legno
-- 2: seleziona pietra
-- 3: seleziona terra
-- R: reset mondo
-- ESC: pausa
 
-## Obiettivo Sprint 1
-Creare una base giocabile con menu, HUD, mondo a blocchi, movimento, raccolta e costruzione.
+- A / D oppure frecce: movimento
+- Spazio / W / freccia su: salto
+- Click sinistro: raccogli blocco
+- Click destro: piazza blocco
+- 1: seleziona terra
+- 2: seleziona legno
+- 3: seleziona pietra
+- P: pausa
+- S: salva partita
+- R: reset mondo
+
+## Pubblicazione
+
+Carica questi file nel repository GitHub `tiny-kingdoms`.
+Vercel aggiornerà automaticamente il progetto.
