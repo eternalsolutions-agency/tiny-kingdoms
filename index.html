@@ -3,35 +3,154 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AND: Tiny Kingdoms v0.6.0</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>AND: Tiny Kingdoms v0.5.1 Polish</title>
+  <style>
+    *{box-sizing:border-box} html,body{margin:0;height:100%;overflow:hidden;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#0b1638;color:white} canvas{display:block;width:100vw;height:100vh;image-rendering:pixelated;background:#82d8ff} .hint{position:fixed;left:14px;bottom:10px;font-size:13px;color:#fff;background:rgba(0,0,0,.28);padding:8px 10px;border-radius:10px;backdrop-filter:blur(5px)}
+  </style>
 </head>
 <body>
-  <div id="game-wrap">
-    <canvas id="game" width="960" height="540"></canvas>
-    <div id="overlay" class="screen active">
-      <div class="logo">AND</div>
-      <div class="subtitle">Tiny Kingdoms</div>
-      <button id="newGame" class="btn">Nuova Partita</button>
-      <button id="commands" class="btn secondary">Comandi</button>
-      <div id="commandBox" class="commands hidden">← → / A D = muovi · Spazio = salto · R = riparti dal checkpoint · P = pausa</div>
-    </div>
-    <div id="select" class="screen hidden">
-      <h1>Scegli il tuo eroe</h1>
-      <div class="cards">
-        <button class="card" data-id="leo"><span class="avatar boy">●</span><b>Leo</b><small>Equilibrato</small></button>
-        <button class="card" data-id="noah"><span class="avatar fast">●</span><b>Noah</b><small>Veloce</small></button>
-        <button class="card" data-id="zipp"><span class="avatar odd">●</span><b>Zipp</b><small>Strano</small></button>
-        <button class="card" data-id="luna"><span class="avatar princess">●</span><b>Luna</b><small>Principessa</small></button>
-      </div>
-      <button id="start" class="btn">Inizia Avventura</button>
-    </div>
-    <div id="finish" class="screen hidden">
-      <div class="logo small">Livello completato!</div>
-      <p id="scoreText"></p>
-      <button id="again" class="btn">Rigioca</button>
-    </div>
-  </div>
-  <script src="game.js"></script>
+<canvas id="game" width="960" height="540"></canvas>
+<div class="hint">A/D o frecce: muovi · Spazio: salta · P: pausa · R: reset · Click/Invio: seleziona</div>
+<script>
+(() => {
+'use strict';
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+const W = canvas.width, H = canvas.height;
+const keys = new Set();
+let mouse = {x:0,y:0,click:false};
+addEventListener('keydown', e => { keys.add(e.key.toLowerCase()); if([' ','arrowup','arrowdown','arrowleft','arrowright'].includes(e.key.toLowerCase())) e.preventDefault(); });
+addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
+canvas.addEventListener('mousemove', e => { const r=canvas.getBoundingClientRect(); mouse.x=(e.clientX-r.left)*W/r.width; mouse.y=(e.clientY-r.top)*H/r.height; });
+canvas.addEventListener('click', () => mouse.click=true);
+const scene = { state:'menu', selected:0, levelComplete:false, paused:false, fade:0 };
+const chars = [
+ {name:'Leo', role:'Esploratore', color:'#2f8cff', accent:'#ffd76b', speed:3.4, jump:12.5, desc:'Equilibrato e coraggioso.'},
+ {name:'Noah', role:'Agile', color:'#24b36b', accent:'#f7e36b', speed:3.9, jump:11.9, desc:'Più veloce nei salti lunghi.'},
+ {name:'Nox', role:'Strano', color:'#7c4dff', accent:'#67f7ff', speed:3.2, jump:12.2, desc:'Misterioso. La magia arriverà.'},
+ {name:'Luna', role:'Principessa', color:'#ff5fa8', accent:'#ffe1f0', speed:3.3, jump:13.2, desc:'Salto alto e stile regale.'}
+];
+const player = {x:70,y:260,w:28,h:42,vx:0,vy:0,onGround:false,life:3,energy:100,crystals:0,coins:0,checkpoint:{x:70,y:260},invuln:0,anim:0};
+let camX = 0, t=0;
+const solids = [];
+const crystals = [];
+const coins = [];
+const enemies = [];
+const checkpoints = [];
+const particles = [];
+function rect(x,y,w,h,type='grass'){ solids.push({x,y,w,h,type}); }
+function makeLevel(){
+ solids.length=crystals.length=coins.length=enemies.length=checkpoints.length=particles.length=0;
+ player.x=70; player.y=260; player.vx=player.vy=0; player.life=3; player.energy=100; player.crystals=0; player.coins=0; player.checkpoint={x:70,y:260}; scene.levelComplete=false; scene.paused=false;
+ rect(0,405,500,135,'grass'); rect(540,390,360,150,'grass'); rect(960,415,420,125,'grass'); rect(1450,390,380,150,'grass'); rect(1880,410,560,130,'grass');
+ rect(220,325,110,28,'wood'); rect(410,285,130,28,'wood'); rect(720,305,125,28,'stone'); rect(1020,330,110,28,'wood'); rect(1240,285,140,28,'stone'); rect(1590,310,110,28,'wood'); rect(1745,260,120,28,'wood');
+ rect(2020,330,150,28,'stone'); rect(2230,285,120,28,'wood');
+ for(let i=0;i<8;i++) coins.push({x:245+i*25,y:288,r:8,taken:false});
+ [[450,245],[760,265],[1060,292],[1280,245],[1625,272],[1785,220],[2070,292],[2270,245]].forEach(p=>crystals.push({x:p[0],y:p[1],r:11,taken:false}));
+ enemies.push({x:610,y:356,w:34,h:24,vx:1.1,min:560,max:850,type:'slime'}); enemies.push({x:1180,y:382,w:34,h:24,vx:1.2,min:990,max:1350,type:'slime'}); enemies.push({x:1970,y:378,w:34,h:24,vx:1.25,min:1880,max:2220,type:'slime'});
+ checkpoints.push({x:930,y:348,active:false}); checkpoints.push({x:1840,y:348,active:false});
+}
+makeLevel();
+function startGame(){ scene.state='game'; makeLevel(); }
+function overlap(a,b){ return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y; }
+function playerRect(){ return {x:player.x,y:player.y,w:player.w,h:player.h}; }
+function respawn(){ player.x=player.checkpoint.x; player.y=player.checkpoint.y; player.vx=0; player.vy=0; player.life=Math.max(1,player.life); player.invuln=90; }
+function updateGame(){
+ if(keys.has('p')) { keys.delete('p'); scene.paused=!scene.paused; }
+ if(keys.has('r')) { keys.delete('r'); makeLevel(); }
+ if(scene.paused || scene.levelComplete) return;
+ const ch = chars[scene.selected];
+ player.anim += 0.15; if(player.invuln>0) player.invuln--;
+ const left = keys.has('a')||keys.has('arrowleft'), right=keys.has('d')||keys.has('arrowright'), jump=keys.has(' ')||keys.has('w')||keys.has('arrowup');
+ player.vx = (right-left) * ch.speed;
+ if(jump && player.onGround){ player.vy = -ch.jump; player.onGround=false; spawn(player.x+14,player.y+42,'jump'); }
+ player.vy += 0.48; if(player.vy>12) player.vy=12;
+ player.x += player.vx;
+ for(const s of solids){ if(overlap(playerRect(),s)){ if(player.vx>0) player.x=s.x-player.w; else if(player.vx<0) player.x=s.x+s.w; }}
+ player.y += player.vy; player.onGround=false;
+ for(const s of solids){ if(overlap(playerRect(),s)){ if(player.vy>0){ player.y=s.y-player.h; player.vy=0; player.onGround=true; } else if(player.vy<0){ player.y=s.y+s.h; player.vy=0; } }}
+ if(player.y>620){ player.life--; respawn(); }
+ for(const c of crystals){ if(!c.taken && Math.hypot(player.x+14-c.x, player.y+20-c.y)<28){ c.taken=true; player.crystals++; spawn(c.x,c.y,'crystal'); }}
+ for(const c of coins){ if(!c.taken && Math.hypot(player.x+14-c.x, player.y+20-c.y)<24){ c.taken=true; player.coins++; spawn(c.x,c.y,'coin'); }}
+ for(const cp of checkpoints){ if(Math.abs(player.x-cp.x)<32 && Math.abs(player.y-cp.y)<80){ checkpoints.forEach(x=>x.active=false); cp.active=true; player.checkpoint={x:cp.x,y:cp.y-40}; }}
+ for(const e of enemies){ e.x += e.vx; if(e.x<e.min||e.x>e.max) e.vx*=-1; if(overlap(playerRect(),e) && player.invuln<=0){ if(player.vy>2 && player.y+player.h-10<e.y){ e.dead=true; player.vy=-8; spawn(e.x+17,e.y,'enemy'); } else { player.life--; player.invuln=90; player.vx = player.x<e.x ? -5 : 5; if(player.life<=0){ player.life=3; respawn(); } } }}
+ for(let i=enemies.length-1;i>=0;i--) if(enemies[i].dead) enemies.splice(i,1);
+ if(player.x>2380){ scene.levelComplete=true; }
+ camX += ((player.x - W*0.38) - camX)*0.08; camX=Math.max(0,Math.min(camX,1900));
+ particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.08;p.life--;}); for(let i=particles.length-1;i>=0;i--) if(particles[i].life<=0) particles.splice(i,1);
+}
+function spawn(x,y,type){ for(let i=0;i<10;i++) particles.push({x,y,vx:(Math.random()-.5)*3,vy:(Math.random()-.8)*3,life:28,type}); }
+function rounded(x,y,w,h,r){ ctx.beginPath(); ctx.roundRect(x,y,w,h,r); ctx.fill(); }
+function drawSky(){
+ const g=ctx.createLinearGradient(0,0,0,H); g.addColorStop(0,'#74c9ff'); g.addColorStop(.7,'#b9edff'); g.addColorStop(1,'#eaf7ff'); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+ ctx.fillStyle='rgba(255,255,255,.7)';
+ for(let i=0;i<9;i++){ const x=((i*210 - camX*.18 + t*8)%1150)-120, y=45+(i%4)*45; cloud(x,y,1+(i%3)*.15); }
+ ctx.fillStyle='rgba(72,142,189,.26)'; for(let i=0;i<6;i++){ const x=i*420-camX*.35; ctx.beginPath(); ctx.moveTo(x,405); ctx.lineTo(x+170,235); ctx.lineTo(x+360,405); ctx.fill(); }
+}
+function cloud(x,y,s){ ctx.beginPath(); ctx.ellipse(x,y,34*s,16*s,0,0,7); ctx.ellipse(x+31*s,y-8*s,29*s,21*s,0,0,7); ctx.ellipse(x+66*s,y,40*s,17*s,0,0,7); ctx.fill(); }
+function drawBlock(s){
+ const x=s.x-camX,y=s.y; if(x<-80||x>W+80) return;
+ if(s.type==='grass'){ ctx.fillStyle='#36b85d'; ctx.fillRect(x,y,s.w,12); ctx.fillStyle='#9b6238'; ctx.fillRect(x,y+12,s.w,s.h-12); ctx.fillStyle='rgba(0,0,0,.12)'; for(let i=8;i<s.w;i+=32) ctx.fillRect(x+i,y+22,12,6); }
+ if(s.type==='wood'){ ctx.fillStyle='#b7783d'; ctx.fillRect(x,y,s.w,s.h); ctx.fillStyle='#7a4726'; for(let i=0;i<s.w;i+=24) ctx.fillRect(x+i,y+6,15,4); }
+ if(s.type==='stone'){ ctx.fillStyle='#8d95a3'; ctx.fillRect(x,y,s.w,s.h); ctx.fillStyle='#687281'; for(let i=10;i<s.w;i+=35) ctx.fillRect(x+i,y+8,18,5); }
+ ctx.strokeStyle='rgba(255,255,255,.22)'; ctx.strokeRect(x+.5,y+.5,s.w-1,s.h-1);
+}
+function drawHero(x,y,scale=1, ch=chars[scene.selected]){
+ ctx.save(); ctx.translate(x,y); ctx.scale(scale,scale); const bob=Math.sin(t*7)*2;
+ ctx.fillStyle='rgba(0,0,0,.18)'; ctx.beginPath(); ctx.ellipse(14,44,15,5,0,0,7); ctx.fill();
+ ctx.fillStyle=ch.color; ctx.fillRect(5,18+bob,18,21); ctx.fillStyle=ch.accent; ctx.fillRect(3,16+bob,22,8);
+ ctx.fillStyle='#ffd0a8'; ctx.fillRect(7,6+bob,15,14); ctx.fillStyle='#5a2f1d'; ctx.fillRect(6,4+bob,17,6); ctx.fillStyle='#1d2433'; ctx.fillRect(11,11+bob,2,2); ctx.fillRect(18,11+bob,2,2);
+ ctx.fillStyle='#26344f'; ctx.fillRect(7,39+bob,6,8); ctx.fillRect(17,39+bob,6,8);
+ if(ch.name==='Luna'){ ctx.fillStyle='#ffd75e'; ctx.fillRect(8,1+bob,12,4); ctx.fillRect(11,-3+bob,6,5); }
+ if(ch.name==='Nox'){ ctx.fillStyle='#2b174a'; ctx.fillRect(2,18+bob,6,25); }
+ ctx.restore();
+}
+function drawGame(){
+ drawSky();
+ solids.forEach(drawBlock);
+ // trees/decorations
+ for(const x of [120,610,1110,1510,1940,2320]){ const sx=x-camX; if(sx>-80&&sx<W+80){ ctx.fillStyle='#8a542e'; ctx.fillRect(sx,330,24,75); ctx.fillStyle='#38a853'; ctx.beginPath(); ctx.ellipse(sx+12,318,48,34,0,0,7); ctx.fill(); ctx.fillStyle='#4fd46d'; ctx.beginPath(); ctx.ellipse(sx-6,305,30,24,0,0,7); ctx.ellipse(sx+31,302,32,26,0,0,7); ctx.fill(); }}
+ coins.forEach(c=>{ if(c.taken) return; ctx.fillStyle='#ffd44d'; ctx.beginPath(); ctx.arc(c.x-camX,c.y+Math.sin(t*5+c.x)*3,c.r,0,7); ctx.fill(); ctx.strokeStyle='#b87918'; ctx.stroke(); });
+ crystals.forEach(c=>{ if(c.taken) return; const x=c.x-camX,y=c.y+Math.sin(t*4+c.x)*3; ctx.fillStyle='#63f1ff'; ctx.beginPath(); ctx.moveTo(x,y-14); ctx.lineTo(x+12,y); ctx.lineTo(x,y+16); ctx.lineTo(x-12,y); ctx.closePath(); ctx.fill(); ctx.strokeStyle='#1a92d6'; ctx.stroke(); });
+ checkpoints.forEach(cp=>{ const x=cp.x-camX; ctx.fillStyle='#5d3b25'; ctx.fillRect(x,cp.y-70,8,70); ctx.fillStyle=cp.active?'#54f070':'#ffcf4d'; ctx.beginPath(); ctx.moveTo(x+8,cp.y-68); ctx.lineTo(x+52,cp.y-55); ctx.lineTo(x+8,cp.y-42); ctx.fill(); });
+ enemies.forEach(e=>{ const x=e.x-camX,y=e.y; ctx.fillStyle='#55cf6a'; ctx.beginPath(); ctx.ellipse(x+17,y+17,18,14,0,0,7); ctx.fill(); ctx.fillStyle='#16371d'; ctx.fillRect(x+9,y+12,3,3); ctx.fillRect(x+22,y+12,3,3); });
+ // flag
+ ctx.fillStyle='#6e442b'; ctx.fillRect(2425-camX,310,10,100); ctx.fillStyle='#ff5fa8'; ctx.beginPath(); ctx.moveTo(2435-camX,310); ctx.lineTo(2492-camX,330); ctx.lineTo(2435-camX,350); ctx.fill();
+ drawHero(player.x-camX,player.y,1,chars[scene.selected]);
+ particles.forEach(p=>{ ctx.globalAlpha=Math.max(0,p.life/28); ctx.fillStyle=p.type==='crystal'?'#63f1ff':p.type==='coin'?'#ffd44d':p.type==='enemy'?'#83f28a':'#fff'; ctx.fillRect(p.x-camX,p.y,4,4); ctx.globalAlpha=1; });
+ drawHUD();
+ if(scene.paused) overlay('PAUSA','Premi P per continuare');
+ if(scene.levelComplete) overlay('Livello completato!','Cristalli: '+player.crystals+' · Monete: '+player.coins+' · Premi R per rigiocare');
+}
+function drawHUD(){
+ ctx.fillStyle='rgba(13,28,61,.72)'; rounded(16,14,355,54,14); ctx.fillStyle='#fff'; ctx.font='700 18px system-ui'; ctx.fillText('AND: Tiny Kingdoms',30,38); ctx.font='600 11px system-ui'; ctx.fillStyle='rgba(255,255,255,.75)'; ctx.fillText('v0.5.1',30,52);
+ for(let i=0;i<3;i++){ ctx.fillStyle=i<player.life?'#ff4d6d':'rgba(255,255,255,.25)'; ctx.beginPath(); ctx.arc(210+i*24,32,9,0,7); ctx.fill(); }
+ ctx.fillStyle='#63f1ff'; ctx.fillText('💎 '+player.crystals,290,38); ctx.fillStyle='#ffd44d'; ctx.fillText('● '+player.coins,330,38);
+}
+function overlay(title,sub){ ctx.fillStyle='rgba(0,0,0,.45)'; ctx.fillRect(0,0,W,H); ctx.fillStyle='#fff'; ctx.textAlign='center'; ctx.font='800 44px system-ui'; ctx.fillText(title,W/2,240); ctx.font='500 20px system-ui'; ctx.fillText(sub,W/2,278); ctx.textAlign='left'; }
+function drawMenu(){
+ drawSky();
+ ctx.textAlign='center'; ctx.fillStyle='rgba(0,0,0,.2)'; ctx.font='900 96px system-ui'; ctx.fillText('AND',W/2+4,128+4); ctx.fillStyle='#ffd45c'; ctx.fillText('AND',W/2,128); ctx.font='800 34px system-ui'; ctx.fillStyle='#fff'; ctx.fillText('Tiny Kingdoms',W/2,172); ctx.font='700 14px system-ui'; ctx.fillStyle='rgba(255,255,255,.85)'; ctx.fillText('v0.5.1 Polish',W/2,198);
+ const btn={x:W/2-135,y:245,w:270,h:58}; ctx.fillStyle='#ffcf4d'; rounded(btn.x,btn.y,btn.w,btn.h,18); ctx.fillStyle='#472c13'; ctx.font='800 24px system-ui'; ctx.fillText('Inizia Avventura',W/2,282);
+ ctx.fillStyle='rgba(255,255,255,.9)'; ctx.font='500 17px system-ui'; ctx.fillText('Scegli il tuo eroe e salva le Isole del Cielo',W/2,330);
+ if(mouse.click && mouse.x>btn.x&&mouse.x<btn.x+btn.w&&mouse.y>btn.y&&mouse.y<btn.y+btn.h){ scene.state='select'; mouse.click=false; }
+ ctx.textAlign='left';
+}
+function drawSelect(){
+ drawSky(); ctx.textAlign='center'; ctx.fillStyle='#fff'; ctx.font='900 44px system-ui'; ctx.fillText('Scegli il tuo eroe',W/2,70);
+ const startX=95, cardW=180, gap=28;
+ chars.forEach((ch,i)=>{ const x=startX+i*(cardW+gap), y=120; const hover=mouse.x>x&&mouse.x<x+cardW&&mouse.y>y&&mouse.y<y+260; if(mouse.click&&hover){ scene.selected=i; }
+ ctx.fillStyle=i===scene.selected?'#fff':'rgba(255,255,255,.65)'; rounded(x-4,y-4,cardW+8,268,22); ctx.fillStyle=i===scene.selected?'#304f91':'#244172'; rounded(x,y,cardW,260,18); if(i===scene.selected){ ctx.strokeStyle='#ffcf4d'; ctx.lineWidth=4; ctx.strokeRect(x+8,y+8,cardW-16,244); ctx.lineWidth=1; } drawHero(x+70,y+50,2.2,ch); ctx.fillStyle='#fff'; ctx.font='800 24px system-ui'; ctx.fillText(ch.name,x+cardW/2,y+160); ctx.font='600 16px system-ui'; ctx.fillText(ch.role,x+cardW/2,y+187); ctx.font='500 13px system-ui'; ctx.fillText(ch.desc,x+cardW/2,y+215); });
+ const btn={x:W/2-110,y:440,w:220,h:58}; ctx.fillStyle='#60e372'; rounded(btn.x,btn.y,btn.w,btn.h,18); ctx.fillStyle='#12351a'; ctx.font='900 24px system-ui'; ctx.fillText('Gioca',W/2,477);
+ if(mouse.click && mouse.x>btn.x&&mouse.x<btn.x+btn.w&&mouse.y>btn.y&&mouse.y<btn.y+btn.h){ startGame(); }
+ mouse.click=false; ctx.textAlign='left';
+}
+function update(){ t+=1/60; if(scene.state==='game') updateGame(); }
+function draw(){ if(scene.state==='menu') drawMenu(); else if(scene.state==='select') drawSelect(); else drawGame(); }
+function loop(){ update(); draw(); requestAnimationFrame(loop); }
+loop();
+})();
+</script>
 </body>
 </html>

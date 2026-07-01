@@ -1,9 +1,16 @@
-# v0.6.0 WOW
+# Changelog - v0.5.1 Polish
 
-- Nuovo livello più ricco e lungo
-- Sfondo con nuvole e montagne parallax
-- Aggiunti cristalli e monete
-- Aggiunti nemici slime
-- Aggiunti elementi decorativi: alberi, fiori, cespugli
-- Migliorati menu e selezione personaggi
-- Aggiunta pausa e ritorno al checkpoint
+## Stato
+Versione stabile basata su v0.5.0.
+
+## Miglioramenti
+- Ripristinata la base grafica/gameplay della v0.5.0.
+- Menu leggermente rifinito.
+- Selezione personaggi più chiara con evidenza del personaggio scelto.
+- Salto leggermente migliorato per rendere la raccolta meno frustrante.
+- HUD con indicazione versione.
+
+## Evitato
+- Nessuna nuova grafica pesante.
+- Nessuna modifica rischiosa al gameplay.
+- Nessuna funzione sperimentale.

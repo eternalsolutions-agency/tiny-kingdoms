@@ -1,12 +1,13 @@
-# AND: Tiny Kingdoms v0.6.0 WOW
+# AND: Tiny Kingdoms v0.5.1 Polish
 
-Versione giocabile da browser.
+Base stabile derivata dalla v0.5.0.
 
-## Comandi
-- Frecce / A D: movimento
-- Spazio / W / Freccia su: salto
-- R: ritorna al checkpoint
+## Come giocare
+- A/D o frecce: muovi
+- Spazio: salta
 - P: pausa
+- R: reset/checkpoint
+- Click: seleziona menu/personaggio
 
-## Caricamento su GitHub
-Carica tutti i file estratti nel repository unico `tiny-kingdoms`.
+## Nota
+Questa versione corregge la direzione dopo la v0.6.0 non approvata: mantiene il gameplay stabile della v0.5.0 e aggiunge solo piccoli ritocchi sicuri.
