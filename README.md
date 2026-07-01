@@ -1,8 +1,12 @@
-# AND: Tiny Kingdoms v0.4.2
+# AND: Tiny Kingdoms v0.6.0 WOW
 
-Versione correttiva: salto migliorato e cristalli raggiungibili.
+Versione giocabile da browser.
 
 ## Comandi
-- Frecce / A-D: muovi
-- Spazio / W / Freccia su: salta
-- R: reset livello
+- Frecce / A D: movimento
+- Spazio / W / Freccia su: salto
+- R: ritorna al checkpoint
+- P: pausa
+
+## Caricamento su GitHub
+Carica tutti i file estratti nel repository unico `tiny-kingdoms`.

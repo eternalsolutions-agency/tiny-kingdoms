@@ -1,9 +1,9 @@
-# Changelog
+# v0.6.0 WOW
 
-## v0.5.0 - Green Hills Milestone
-- Aggiunto menu iniziale.
-- Aggiunta selezione personaggi: Leo, Noah, Nox, Luna.
-- Creato primo livello platform completo.
-- Aggiunti cristalli, monete, checkpoint, slime e bandiera finale.
-- Migliorato salto e posizionamento dei collezionabili.
-- HUD aggiornata con vite, cristalli e monete.
+- Nuovo livello più ricco e lungo
+- Sfondo con nuvole e montagne parallax
+- Aggiunti cristalli e monete
+- Aggiunti nemici slime
+- Aggiunti elementi decorativi: alberi, fiori, cespugli
+- Migliorati menu e selezione personaggi
+- Aggiunta pausa e ritorno al checkpoint
