@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tiny Kingdoms: Sky Islands</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="game-wrap">
+    <canvas id="game" width="960" height="540"></canvas>
+    <div id="hud">
+      <div class="brand">Tiny Kingdoms <span>Sky Islands</span></div>
+      <div class="stats">
+        <span>Legno: <b id="wood-count">0</b></span>
+        <span>Pietra: <b id="stone-count">0</b></span>
+        <span>Blocco: <b id="selected-block">Legno</b></span>
+      </div>
+      <div class="help">A/D o Frecce: muovi · Spazio: salta · Click sinistro: raccogli · Click destro: costruisci · 1 Legno · 2 Pietra · R: reset</div>
+    </div>
+    <div id="menu" class="screen active">
+      <h1>Tiny Kingdoms</h1>
+      <h2>Sky Islands</h2>
+      <p>Costruisci il tuo piccolo regno tra le isole del cielo.</p>
+      <button id="play-btn">Gioca</button>
+    </div>
+    <div id="pause" class="screen">
+      <h1>Pausa</h1>
+      <p>Premi ESC per tornare al gioco.</p>
+    </div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
