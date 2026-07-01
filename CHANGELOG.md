@@ -1,8 +1,9 @@
-# AND: Tiny Kingdoms v0.4.2
+# Changelog
 
-## Fix gameplay
-- Aumentata l'altezza del salto dei 4 personaggi.
-- Riposizionati i cristalli lungo un percorso più raggiungibile.
-- Resa la raccolta più fluida e meno frustrante.
-
-Commit consigliato: `v0.4.2 fix salto cristalli`
+## v0.5.0 - Green Hills Milestone
+- Aggiunto menu iniziale.
+- Aggiunta selezione personaggi: Leo, Noah, Nox, Luna.
+- Creato primo livello platform completo.
+- Aggiunti cristalli, monete, checkpoint, slime e bandiera finale.
+- Migliorato salto e posizionamento dei collezionabili.
+- HUD aggiornata con vite, cristalli e monete.
