@@ -1,6 +1,6 @@
 # Tiny Kingdoms: Sky Islands
 
-Versione: **v0.2.0 - Sprint 2**
+Versione: **v0.2.1 - Sprint 2 - Fix menu**
 
 Tiny Kingdoms è un prototipo di videogioco sandbox 2D per browser.
 

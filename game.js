@@ -63,7 +63,6 @@
     ];
     islands.forEach((island, idx) => makeIsland(island.x, island.y, island.w, island.h, idx));
     plantTree(8, 23); plantTree(17, 23); plantTree(43, 18); plantTree(75, 24); plantTree(106, 16);
-    world[54][0];
     setBlock(54, 17, 6); setBlock(84, 23, 6);
     player.x = 7 * TILE; player.y = 18 * TILE; player.vx = 0; player.vy = 0;
     saveGame(false);

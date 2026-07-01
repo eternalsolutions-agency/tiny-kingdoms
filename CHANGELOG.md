@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.1 - Fix menu
+
+### Corretto
+- Risolto il problema del pulsante **Inizia avventura** che non avviava il gioco.
+- Rimossa una riga di debug che bloccava la generazione del mondo.
+
 ## v0.2.0 - Sprint 2
 
 ### Aggiunto
