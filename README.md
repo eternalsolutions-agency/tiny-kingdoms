@@ -1,27 +1,24 @@
-# Tiny Kingdoms: Sky Islands
+# AND: Tiny Kingdoms
 
-Versione: **v0.2.1 - Sprint 2 - Fix menu**
-
-Tiny Kingdoms è un prototipo di videogioco sandbox 2D per browser.
+Versione: **v0.3.0 - Character Select Platform**
 
 ## Come provarlo
-
-Apri il file `index.html` nel browser.
+Apri `index.html` nel browser.
 
 ## Comandi
+- **A / D** oppure **Frecce**: muovi il personaggio
+- **Spazio**: salta
+- **R**: ricomincia il livello
+- **ESC**: torna al menu
 
-- A / D oppure frecce: movimento
-- Spazio / W / freccia su: salto
-- Click sinistro: raccogli blocco
-- Click destro: piazza blocco
-- 1: seleziona terra
-- 2: seleziona legno
-- 3: seleziona pietra
-- P: pausa
-- S: salva partita
-- R: reset mondo
+## Novità v0.3.0
+- Cambio ufficiale verso stile platform 2D.
+- Nuovo titolo: **AND: Tiny Kingdoms**.
+- Menu principale rinnovato.
+- Selezione di 4 personaggi: Leo, Finn, Nox, Luna.
+- Primo livello platform con isole, piattaforme, cristalli e nemici semplici.
+- HUD con vita, energia, cristalli e personaggio scelto.
+- Fine livello base.
 
 ## Pubblicazione
-
-Carica questi file nel repository GitHub `tiny-kingdoms`.
-Vercel aggiornerà automaticamente il progetto.
+Caricare i file estratti nel repository GitHub `tiny-kingdoms`. Vercel aggiornerà automaticamente il gioco.

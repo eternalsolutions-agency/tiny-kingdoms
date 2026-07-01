@@ -3,46 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tiny Kingdoms: Sky Islands</title>
-  <meta name="description" content="Tiny Kingdoms: Sky Islands - prototipo sandbox 2D." />
+  <title>AND: Tiny Kingdoms</title>
+  <meta name="description" content="AND: Tiny Kingdoms - platform 2D fantasy per bambini" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="gameShell">
-    <canvas id="game" width="960" height="540"></canvas>
-
-    <section id="startScreen" class="panel overlay">
-      <div class="logoBadge">☁️</div>
-      <h1>Tiny Kingdoms</h1>
-      <h2>Sky Islands</h2>
-      <p>Esplora, raccogli materiali e costruisci il tuo piccolo regno tra le nuvole.</p>
-      <button id="startBtn">Inizia avventura</button>
-      <button id="howBtn" class="ghost">Comandi</button>
-    </section>
-
-    <section id="helpScreen" class="panel overlay hidden">
-      <h2>Comandi</h2>
-      <p><strong>A / D</strong> oppure <strong>← / →</strong>: muovi il personaggio</p>
-      <p><strong>Spazio / W / ↑</strong>: salta</p>
-      <p><strong>Click sinistro</strong>: raccogli/rompi blocco</p>
-      <p><strong>Click destro</strong>: piazza blocco selezionato</p>
-      <p><strong>1 / 2 / 3</strong>: seleziona terra, legno, pietra</p>
-      <p><strong>P</strong>: pausa · <strong>R</strong>: reset mondo · <strong>S</strong>: salva</p>
-      <button id="backBtn">Torna al menu</button>
-    </section>
-
-    <div id="hud" class="hud hidden">
-      <div class="brandMini">Tiny Kingdoms <span>v0.2.1</span></div>
-      <div class="bars">
-        <div class="bar"><span>❤️ Vita</span><i id="lifeBar"></i></div>
-        <div class="bar energy"><span>⚡ Energia</span><i id="energyBar"></i></div>
-      </div>
-      <div id="inventory" class="inventory"></div>
-      <div id="objective" class="objective">Missione: raccogli 10 legni e 10 pietre</div>
-      <div id="message" class="message"></div>
-    </div>
-  </div>
-
+  <main id="app">
+    <canvas id="gameCanvas" width="1280" height="720" aria-label="AND Tiny Kingdoms gioco"></canvas>
+    <div id="overlay" class="overlay"></div>
+  </main>
   <script src="game.js"></script>
 </body>
 </html>
