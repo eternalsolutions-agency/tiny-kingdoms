@@ -1,11 +1,12 @@
-# AND: Tiny Kingdoms v0.4.0
+# AND: Tiny Kingdoms v0.4.1
 
-Versione platform 2D con selezione personaggio, primo livello, cristalli, slime, checkpoint e bandiera finale.
+Versione con direzione grafica aggiornata, menu in stile card personaggi e primo asset set documentato.
 
-## Comandi
-- A/D o Frecce: movimento
-- Spazio: salto
-- R: ricomincia il livello
+## Come provarlo
+Apri `index.html` nel browser oppure carica i file su GitHub/Vercel.
 
-## Pubblicazione
-Caricare tutti i file estratti nel repository GitHub `tiny-kingdoms` e fare commit.
+## Controlli
+- Frecce / A D: movimento
+- Spazio / W: salto
+- R: ricomincia
+- ESC: torna al menu
