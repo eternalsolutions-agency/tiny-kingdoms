@@ -1,12 +1,8 @@
-# AND: Tiny Kingdoms v0.4.1
+# AND: Tiny Kingdoms v0.4.2
 
-Versione con direzione grafica aggiornata, menu in stile card personaggi e primo asset set documentato.
+Versione correttiva: salto migliorato e cristalli raggiungibili.
 
-## Come provarlo
-Apri `index.html` nel browser oppure carica i file su GitHub/Vercel.
-
-## Controlli
-- Frecce / A D: movimento
-- Spazio / W: salto
-- R: ricomincia
-- ESC: torna al menu
+## Comandi
+- Frecce / A-D: muovi
+- Spazio / W / Freccia su: salta
+- R: reset livello

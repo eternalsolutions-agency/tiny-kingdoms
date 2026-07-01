@@ -1,8 +1,8 @@
-# Changelog
+# AND: Tiny Kingdoms v0.4.2
 
-## v0.4.1 - Art Set Base
-- Ripristinata direzione menu/personaggi ispirata alla v0.3.1.
-- Aggiunte card personaggi più curate.
-- Aggiunto primo livello platform funzionante.
-- Aggiunto documento art bible iniziale.
-- Inseriti concept asset in `docs/` e `assets/ui/`.
+## Fix gameplay
+- Aumentata l'altezza del salto dei 4 personaggi.
+- Riposizionati i cristalli lungo un percorso più raggiungibile.
+- Resa la raccolta più fluida e meno frustrante.
+
+Commit consigliato: `v0.4.2 fix salto cristalli`
